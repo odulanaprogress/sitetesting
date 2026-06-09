@@ -1,0 +1,52 @@
+/* Animations */
+@keyframes slide-in-left {
+  from { opacity: 0; transform: translateX(-100%); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes slide-in-right {
+  from { opacity: 0; transform: translateX(100%); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+.animate-slide-in-left  { animation: slide-in-left  0.35s ease-out; }
+.animate-slide-in-right { animation: slide-in-right 0.35s ease-out; }
+.animate-fade-in        { animation: fade-in        0.3s ease-out; }
+
+/* Reusable form input */
+.form-input {
+  @apply w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm
+         focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all;
+}
+
+/* WhatsApp chat background */
+.bg-whatsapp {
+  background-color: #E5DDD5;
+}
+
+/* Purchase ticker */
+@keyframes ticker-scroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.ticker-animate {
+  animation: ticker-scroll 45s linear infinite;
+}
+.ticker-animate:hover {
+  animation-play-state: paused;
+}
+
+/* Snap scroll row */
+.snap-row {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.snap-row::-webkit-scrollbar { display: none; }
+.snap-row > * { scroll-snap-align: start; }

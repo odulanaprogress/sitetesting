@@ -1,0 +1,86 @@
+/* ===== Mobile Optimization ===== */
+
+/* Prevent horizontal overflow on all devices */
+html, body {
+  overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Scrollbar hide utility */
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* Safe area support for notched devices (iPhone X+) */
+.safe-bottom { padding-bottom: env(safe-area-inset-bottom); }
+.safe-top    { padding-top:    env(safe-area-inset-top); }
+
+/* Images always within bounds */
+img { max-width: 100%; height: auto; }
+
+@media (max-width: 768px) {
+  /* Prevent inputs from zooming on iOS (must be 16px+) */
+  input,
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+
+  /* Touch targets: apply only to interactive elements, not all <a> */
+  button,
+  [role="button"],
+  input[type="button"],
+  input[type="submit"],
+  input[type="checkbox"],
+  input[type="radio"] {
+    min-height: 40px;
+  }
+
+  /* Nav links get larger tap area */
+  nav a {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+
+  /* Table responsiveness */
+  .table-container,
+  .overflow-x-auto {
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Better modal behaviour */
+  .mobile-drawer {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+}
+
+/* Very small screens (< 375px - e.g. iPhone SE) */
+@media (max-width: 374px) {
+  body { font-size: 14px; }
+
+  h1 { font-size: 1.5rem !important; }
+  h2 { font-size: 1.25rem !important; }
+
+  .text-xs { font-size: 0.6875rem; }
+}
+
+/* Landscape mobile */
+@media (max-width: 768px) and (orientation: landscape) {
+  .hero-min-h { min-height: 55vh; }
+}
+
+/* Tap highlight removal for cleaner feel */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Focus visible only for keyboard navigation */
+:focus:not(:focus-visible) { outline: none; }
+:focus-visible { outline: 2px solid #f97316; outline-offset: 2px; }
