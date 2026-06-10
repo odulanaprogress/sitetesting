@@ -71,12 +71,9 @@ export function LoginPage() {
       <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmZmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PHBhdGggZD0iTTM2IDE2YzAgMTAgMjAgMTAgMjAgMjBzLTEwIDIwLTIwIDIwLTIwLTEwLTIwLTIwIDEwLTIwIDIwLTIweiIvPjwvZz48L2c+PC9zdmc+')] opacity-20" />
 
       <div className="relative w-full max-w-md">
-        {/* Logo */}
-        <div className="text-center mb-7">
-          <Link to="/" className="inline-block">
-            <img src={logoImage} alt="Zeetech Distribution" className="h-20 w-auto object-contain mx-auto drop-shadow-xl" />
-          </Link>
-          <h1 className="text-2xl font-extrabold text-gray-900 mt-3 tracking-tight">Zeetech Distribution</h1>
+        {/* Branding heading */}
+        <div className="text-center mb-6">
+          <h1 className="text-2xl font-extrabold text-gray-900 tracking-tight">Zeetech Distribution</h1>
           <p className="text-[#b91c1c] text-sm mt-1 font-medium">Your Trusted Tech Partner in Nigeria</p>
         </div>
 

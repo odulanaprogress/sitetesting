@@ -114,20 +114,14 @@ export function Header() {
               {/* Logo */}
               <Link
                 to="/"
-                className="flex items-center gap-2 flex-shrink-0"
+                className="flex items-center flex-shrink-0"
               >
                 <img
                   src={logoImage}
                   alt="Zeetech Distribution"
-                  className="w-36 h-36 sm:w-[168px] sm:h-[168px] drop-shadow-md flex-shrink-0"
+                  className="w-40 h-40 sm:w-[190px] sm:h-[190px] drop-shadow-md flex-shrink-0"
                   style={{ objectFit: 'contain' }}
                 />
-                <div className="hidden sm:block">
-                  <div className="text-white font-extrabold text-lg sm:text-xl leading-tight drop-shadow-md tracking-tight">
-                    Zeetech
-                  </div>
-                  <div className="text-amber-300 text-xs leading-tight font-bold tracking-wide">Distribution</div>
-                </div>
               </Link>
 
               {/* Desktop Search */}
