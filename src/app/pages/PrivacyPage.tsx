@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { ArrowLeft, Shield } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 
 export function PrivacyPage() {
   return (
@@ -10,7 +10,6 @@ export function PrivacyPage() {
             <ArrowLeft size={16} /> Back to Home
           </Link>
           <div className="flex items-center gap-3">
-            <Shield size={32} className="text-amber-300" />
             <div>
               <h1 className="text-3xl font-bold">Privacy Policy</h1>
               <p className="text-white/70 mt-1 text-sm">Last updated: May 2026</p>

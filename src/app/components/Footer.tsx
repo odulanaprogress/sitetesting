@@ -35,7 +35,7 @@ export function Footer() {
               <li><Link to="/products" className="hover:text-[#b91c1c] transition-colors text-gray-600">Shop</Link></li>
               <li><Link to="/login" className="hover:text-[#b91c1c] transition-colors text-gray-600">My Account</Link></li>
               <li><Link to="/wholesale" className="hover:text-[#b91c1c] transition-colors text-gray-600">Wholesale</Link></li>
-              <li><Link to="/about" className="hover:text-[#b91c1c] transition-colors text-gray-600">About Us</Link></li>
+              <li><Link to="/about" className="hover:text-[#b91c1c] transition-colors text-gray-600">Who Are We</Link></li>
               <li><Link to="/privacy" className="hover:text-[#b91c1c] transition-colors text-gray-600">Privacy Policy</Link></li>
               <li><Link to="/terms" className="hover:text-[#b91c1c] transition-colors text-gray-600">Terms & Conditions</Link></li>
               <li><Link to="/refund" className="hover:text-[#b91c1c] transition-colors text-gray-600">Refund & Returns Policy</Link></li>

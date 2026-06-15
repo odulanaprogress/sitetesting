@@ -11,9 +11,9 @@ export function AboutPage() {
           <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 text-white text-xs font-bold px-4 py-2 rounded-full mb-5">
             <Shield size={12} /> Trusted Since Day One
           </div>
-          <h1 className="text-4xl sm:text-5xl font-bold mb-5 leading-tight">Who We Are</h1>
+          <h1 className="text-4xl sm:text-5xl font-bold mb-5 leading-tight">Who Are We</h1>
           <p className="text-lg sm:text-xl text-white/90 leading-relaxed">
-            Zee-Tech Distributions is your trusted source for premium smartphones accessories and electronics in Nigeria. From Infinix smartwatches and earbuds to powerbanks, chargers and cables, we stock only genuine products at the most competitive prices in the market.
+            ZEE-TECH DISTRIBUTIONS ENTERPRISES is a registered business specializing in distribution of quality and reliable phone accessories, computer accessories, content creation kits and IT solutions. We are committed to providing reliable technology products and security solutions for homes, offices, and businesses, with a focus on quality service and customer satisfaction.
           </p>
         </div>
       </section>

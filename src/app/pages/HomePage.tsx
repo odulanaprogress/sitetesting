@@ -248,11 +248,11 @@ export function HomePage() {
         <div className="relative max-w-7xl mx-auto px-4">
           <div className="text-center mb-8">
             <div className="inline-flex items-center gap-2 bg-red-100 text-[#b91c1c] text-xs font-bold px-3 py-1.5 rounded-full mb-3">
-              <Package size={12} /> About Zeetech
+              <Package size={12} /> Who Are We
             </div>
-            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">Who We Are</h2>
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">Who Are We</h2>
             <p className="text-gray-600 text-sm sm:text-base max-w-3xl mx-auto leading-relaxed">
-              Zee-Tech Distributions is your trusted source for premium smartphones accessories and electronics in Nigeria. From Infinix smartwatches and earbuds to powerbanks, chargers and cables, we stock only genuine products at the most competitive prices.
+              ZEE-TECH DISTRIBUTIONS ENTERPRISES is a registered business specializing in distribution of quality and reliable phone accessories, computer accessories, content creation kits and IT solutions. We are committed to providing reliable technology products and security solutions for homes, offices, and businesses, with a focus on quality service and customer satisfaction.
             </p>
           </div>
 
