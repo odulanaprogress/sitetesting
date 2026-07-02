@@ -18,6 +18,13 @@ export function CheckoutPage() {
     deliveryOption: 'standard',
   });
 
+  const [proofFile, setProofFile] = useState<File | null>(null);
+  const [orderReference, setOrderReference] = useState('');
+
+  useEffect(() => {
+    setOrderReference('ZWH-' + Math.floor(100000 + Math.random() * 900000));
+  }, []);
+
   const [isProcessing, setIsProcessing] = useState(false);
 
   const deliveryFee = formData.deliveryOption === 'express' ? 5000 : cartTotal >= 50000 ? 0 : 2500;
@@ -33,61 +40,57 @@ export function CheckoutPage() {
     setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const handlePaystackPayment = async () => {
-    if (!formData.fullName || !formData.email || !formData.phone || !formData.address) {
-      toast.error('Please fill all required fields');
+  const handleFormSubmit = async () => {
+    if (!formData.fullName || !formData.email || !formData.phone || !formData.address || !formData.city || !formData.state) {
+      toast.error('Please fill all required delivery fields');
+      return;
+    }
+    if (!proofFile) {
+      toast.error('Please upload your proof of payment');
       return;
     }
 
     setIsProcessing(true);
 
-    // PAYSTACK INTEGRATION PLACEHOLDER
-    // When client provides Paystack keys, replace this section with actual Paystack implementation
-
     try {
-      // Generate unique reference
-      const reference = 'ZWH-' + Date.now();
+      const submitData = new FormData();
+      submitData.append('Order Reference', orderReference);
+      submitData.append('Full Name', formData.fullName);
+      submitData.append('Email', formData.email);
+      submitData.append('Phone', formData.phone);
+      submitData.append('Delivery Address', formData.address);
+      submitData.append('City', formData.city);
+      submitData.append('State', formData.state);
+      submitData.append('Delivery Option', formData.deliveryOption);
+      submitData.append('Total Amount', `₦${total.toLocaleString()}`);
+      
+      const cartItems = cart.map(item => `${item.quantity}x ${item.name} (₦${(item.price * item.quantity).toLocaleString()})`).join('\n');
+      submitData.append('Order Items', cartItems);
 
-      // MOCK PAYMENT - Replace with actual Paystack inline integration
-      // Example implementation:
-      /*
-      const PaystackPop = window.PaystackPop;
-      const handler = PaystackPop.setup({
-        key: 'YOUR_PAYSTACK_PUBLIC_KEY', // Add client's public key here
-        email: formData.email,
-        amount: total * 100, // Amount in kobo
-        currency: 'NGN',
-        ref: reference,
-        callback: function(response) {
-          // Verify transaction on backend
-          verifyPayment(response.reference);
-        },
-        onClose: function() {
-          setIsProcessing(false);
-          toast.error('Payment cancelled');
+      submitData.append('Proof of Payment', proofFile);
+      submitData.append('_subject', `New Order ${orderReference} from ${formData.fullName}`);
+
+      const response = await fetch('https://formsubmit.co/ajax/zeetechdistributionadminsupport01@mail.com', {
+        method: 'POST',
+        body: submitData,
+        headers: {
+          'Accept': 'application/json'
         }
       });
-      handler.openIframe();
-      */
 
-      // MOCK SUCCESS (Remove when integrating real Paystack)
-      setTimeout(() => {
-        // Simulate successful payment
-        const orderId = reference;
+      const result = await response.json();
 
-        // In production, verify payment on backend before proceeding
-        // Save order to database
-        // Generate and send invoice
-
+      if (result.success === 'true' || response.ok) {
         clearCart();
         setIsProcessing(false);
-        navigate(`/order-success?orderId=${orderId}`);
-        toast.success('Payment successful!');
-      }, 2000);
-
+        navigate(`/order-success?orderId=${orderReference}`);
+        toast.success('Order placed successfully!');
+      } else {
+        throw new Error('Submission failed');
+      }
     } catch (error) {
       setIsProcessing(false);
-      toast.error('Payment failed. Please try again.');
+      toast.error('Failed to submit order. Please try again.');
     }
   };
 
@@ -284,8 +287,44 @@ export function CheckoutPage() {
                 </div>
               </div>
 
+              <div className="bg-red-50 p-4 rounded-lg mb-6 border border-red-100">
+                <h4 className="font-bold text-red-800 mb-2">Payment Instructions</h4>
+                <p className="text-sm text-red-700 mb-2">Please transfer exactly <strong>₦{total.toLocaleString()}</strong> to the account below:</p>
+                <div className="bg-white p-3 rounded border border-red-200 mb-3 text-sm">
+                  <div className="flex justify-between mb-1">
+                    <span className="text-gray-500">Bank:</span>
+                    <span className="font-semibold text-gray-800">Zenith Bank</span>
+                  </div>
+                  <div className="flex justify-between mb-1">
+                    <span className="text-gray-500">Account Name:</span>
+                    <span className="font-semibold text-gray-800">Zeetech Distribution Ltd</span>
+                  </div>
+                  <div className="flex justify-between mb-1">
+                    <span className="text-gray-500">Account Number:</span>
+                    <span className="font-semibold text-gray-800 tracking-wider">1234567890</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-500">Order Ref:</span>
+                    <span className="font-bold text-red-600">{orderReference}</span>
+                  </div>
+                </div>
+                <div className="text-xs text-red-600 font-medium">Use the Order Ref ({orderReference}) as your transfer description.</div>
+              </div>
+
+              <div className="mb-6">
+                <label className="block text-sm font-semibold mb-2">Upload Proof of Payment *</label>
+                <input
+                  type="file"
+                  accept="image/png, image/jpeg, image/jpg, application/pdf, video/mp4"
+                  onChange={e => setProofFile(e.target.files?.[0] || null)}
+                  className="w-full text-sm text-gray-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-red-50 file:text-red-700 hover:file:bg-red-100 border rounded-lg cursor-pointer"
+                  required
+                />
+                <p className="text-xs text-gray-400 mt-1.5">Accepted: PNG, JPG, PDF, MP4 (Max 5MB)</p>
+              </div>
+
               <button
-                onClick={handlePaystackPayment}
+                onClick={handleFormSubmit}
                 disabled={isProcessing}
                 className="w-full bg-red-600 text-white py-3 rounded-lg font-semibold hover:bg-red-700 transition-colors flex items-center justify-center gap-2 disabled:bg-gray-400 disabled:cursor-not-allowed text-sm sm:text-base"
                 style={{ minHeight: '48px' }}
@@ -294,8 +333,8 @@ export function CheckoutPage() {
                   <>Processing...</>
                 ) : (
                   <>
-                    <CreditCard size={18} className="sm:w-5 sm:h-5" />
-                    Pay with Paystack
+                    <CheckCircle size={18} className="sm:w-5 sm:h-5" />
+                    Complete Order
                   </>
                 )}
               </button>
@@ -303,7 +342,7 @@ export function CheckoutPage() {
               <div className="mt-3 sm:mt-4 text-center text-xs sm:text-sm text-gray-600">
                 <div className="flex items-center justify-center gap-1">
                   <CheckCircle size={14} className="sm:w-4 sm:h-4 text-green-600" />
-                  Secure payment powered by Paystack
+                  Proof of payment is securely uploaded to our system
                 </div>
               </div>
             </div>
