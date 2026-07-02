@@ -111,7 +111,16 @@ export function AdminDashboard() {
   }, [isAdmin, navigate, getAllUsers]);
 
   useEffect(() => {
-    if (activeTab === 'users') getAllUsers().then(setUsers).catch(() => setUsers([]));
+    if (activeTab === 'users') {
+      if (db) {
+        const unsub = onSnapshot(collection(db, 'users'), snap => {
+          setUsers(snap.docs.map(d => ({ id: d.id, ...d.data() } as ZeetechUser)));
+        });
+        return () => unsub();
+      } else {
+        getAllUsers().then(setUsers).catch(() => setUsers([]));
+      }
+    }
   }, [activeTab, getAllUsers]);
 
   const handleDeleteProduct = async (id: string) => {
@@ -577,7 +586,7 @@ interface ProductFormProps {
 function ProductForm({ product, onSave, onCancel }: ProductFormProps) {
   const [formData, setFormData] = useState<Partial<Product>>(
     product ?? {
-      name: '', description: '', price: 0, wholesalePrice: undefined,
+      name: '', shortDescription: '', description: '', price: 0, wholesalePrice: undefined,
       category: '', image: '', images: [], stock: 0,
       rating: 4.5, reviews: 0, featured: false, hot: false,
     }
@@ -620,6 +629,7 @@ function ProductForm({ product, onSave, onCancel }: ProductFormProps) {
     const payload: Product = {
       id: product?.id || '',
       name: formData.name.trim(),
+      shortDescription: formData.shortDescription || '',
       description: formData.description || '',
       price: Number(formData.price),
       category: formData.category || 'phone-accessories',
@@ -653,6 +663,9 @@ function ProductForm({ product, onSave, onCancel }: ProductFormProps) {
         <div className="space-y-4">
           <Field label="Product Name *">
             <input type="text" value={formData.name} onChange={e => sf({ name: e.target.value })} className="form-input" placeholder="e.g. INFINIX XPOWER30 30000mAh" required />
+          </Field>
+          <Field label="Short Description">
+            <input type="text" value={formData.shortDescription || ''} onChange={e => sf({ shortDescription: e.target.value })} className="form-input" placeholder="Brief summary (e.g. 30000mAh Power Bank)" />
           </Field>
           <Field label="Description">
             <textarea value={formData.description} onChange={e => sf({ description: e.target.value })} rows={4} className="form-input resize-none" placeholder="Product description..." />

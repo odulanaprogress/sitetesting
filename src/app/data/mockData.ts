@@ -18,6 +18,7 @@ export interface Product {
   subcategory?: string;
   image: string;
   images?: string[];
+  shortDescription?: string;
   description: string;
   stock: number;
   rating: number;

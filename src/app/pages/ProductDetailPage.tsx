@@ -103,6 +103,9 @@ export function ProductDetailPage() {
             <div className="flex items-start justify-between mb-3 sm:mb-4">
               <div className="flex-1">
                 <h1 className="text-xl sm:text-2xl md:text-3xl font-bold mb-2 pr-2">{product.name}</h1>
+                {product.shortDescription && (
+                  <p className="text-sm md:text-base text-gray-500 mb-3 font-medium">{product.shortDescription}</p>
+                )}
                 <div className="flex items-center gap-1.5 sm:gap-2 mb-3 sm:mb-4">
                   <div className="flex">
                     {[...Array(5)].map((_, i) => (
