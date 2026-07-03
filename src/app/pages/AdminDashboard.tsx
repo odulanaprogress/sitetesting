@@ -6,6 +6,7 @@ import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
 import { collection, addDoc, updateDoc, setDoc, deleteDoc, onSnapshot, query, orderBy, doc, Timestamp, getDoc } from 'firebase/firestore';
 import { db } from '../../lib/firebase';
+import { Order, updateOrderStatus } from '../../lib/firestore';
 
 const CLOUD_NAME = 'dlxnaefxk';
 const UPLOAD_PRESET = 'zeetech_products';
@@ -68,7 +69,7 @@ function makeId() {
 
 // ─── Admin Dashboard ──────────────────────────────────────────────────────────
 
-type AdminTab = 'products' | 'add' | 'edit' | 'users' | 'slides' | 'testimonials' | 'categories';
+type AdminTab = 'products' | 'add' | 'edit' | 'users' | 'slides' | 'testimonials' | 'categories' | 'orders';
 
 export function AdminDashboard() {
   const { user, isAdmin, logout, getAllUsers } = useAuth();
@@ -78,6 +79,7 @@ export function AdminDashboard() {
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [users, setUsers] = useState<ZeetechUser[]>([]);
+  const [orders, setOrders] = useState<Order[]>([]);
 
   useEffect(() => {
     if (!isAdmin) { navigate('/login', { replace: true }); return; }
@@ -119,6 +121,16 @@ export function AdminDashboard() {
         return () => unsub();
       } else {
         getAllUsers().then(setUsers).catch(() => setUsers([]));
+      }
+    }
+    
+    if (activeTab === 'orders') {
+      if (db) {
+        const q = query(collection(db, 'orders'), orderBy('createdAt', 'desc'));
+        const unsub = onSnapshot(q, snap => {
+          setOrders(snap.docs.map(d => ({ id: d.id, ...d.data() } as Order)));
+        });
+        return () => unsub();
       }
     }
   }, [activeTab, getAllUsers]);
@@ -223,6 +235,7 @@ export function AdminDashboard() {
           {([
             { id: 'products', label: 'Products', icon: Package },
             { id: 'add', label: 'Add Product', icon: Plus },
+            { id: 'orders', label: 'Orders', icon: Package },
             { id: 'slides', label: 'Slides', icon: ImageIcon },
             { id: 'testimonials', label: 'Testimonials', icon: Users },
             { id: 'categories', label: 'Category Images', icon: ImageIcon },
@@ -242,6 +255,46 @@ export function AdminDashboard() {
             </button>
           ))}
         </div>
+
+        {/* Orders Tab */}
+        {activeTab === 'orders' && (
+          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+            <h3 className="text-lg font-bold mb-4">Orders ({orders.length})</h3>
+            <div className="space-y-4">
+              {orders.map(order => (
+                <div key={order.id} className="border rounded-lg p-4 bg-gray-50 flex flex-col sm:flex-row justify-between gap-4">
+                  <div>
+                    <div className="font-bold text-gray-800">{order.userName}</div>
+                    <div className="text-sm text-gray-600 mb-1">{order.userEmail} | {order.userPhone}</div>
+                    <div className="text-sm text-gray-500 mb-2">{order.shippingAddress.street}, {order.shippingAddress.city}, {order.shippingAddress.state}</div>
+                    <div className="text-xs text-gray-500">Ref: {order.paymentReference} | Date: {order.createdAt?.toDate?.()?.toLocaleDateString?.() || 'N/A'}</div>
+                  </div>
+                  <div className="flex flex-col items-start sm:items-end gap-2">
+                    <div className="font-bold text-red-600">₦{order.total.toLocaleString()}</div>
+                    <div className="text-sm">Status: <span className="font-semibold uppercase">{order.orderStatus}</span></div>
+                    <select
+                      value={order.orderStatus}
+                      onChange={(e) => {
+                        if (order.id) {
+                          updateOrderStatus(order.id, e.target.value as any);
+                          toast.success('Status updated');
+                        }
+                      }}
+                      className="border rounded px-2 py-1 text-sm bg-white"
+                    >
+                      <option value="pending">Pending</option>
+                      <option value="processing">Processing</option>
+                      <option value="shipped">Shipped</option>
+                      <option value="delivered">Delivered</option>
+                      <option value="cancelled">Cancelled</option>
+                    </select>
+                  </div>
+                </div>
+              ))}
+              {orders.length === 0 && <p className="text-gray-500">No orders found.</p>}
+            </div>
+          </div>
+        )}
 
         {/* Products table */}
         {activeTab === 'products' && (

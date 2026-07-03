@@ -1,11 +1,14 @@
 import { useState, useEffect } from 'react';
 import { useCart } from '../context/CartContext';
+import { useAuth } from '../context/AuthContext';
+import { createOrder } from '../../lib/firestore';
 import { useNavigate } from 'react-router-dom';
 import { CreditCard, Package, CheckCircle } from 'lucide-react';
 import { toast } from 'sonner';
 
 export function CheckoutPage() {
   const { cart, cartTotal, clearCart } = useCart();
+  const { user } = useAuth();
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -81,6 +84,37 @@ export function CheckoutPage() {
       const result = await response.json();
 
       if (result.success === 'true' || response.ok) {
+        // Save to Firestore
+        try {
+          await createOrder({
+            userId: user?.id || 'guest',
+            userEmail: formData.email,
+            userName: formData.fullName,
+            userPhone: formData.phone,
+            shippingAddress: {
+              street: formData.address,
+              city: formData.city,
+              state: formData.state,
+              zipCode: '000000'
+            },
+            items: cart.map(item => ({
+              productId: item.id,
+              productName: item.name,
+              quantity: item.quantity,
+              price: item.price,
+              imageUrl: item.image
+            })),
+            subtotal: cartTotal,
+            shipping: deliveryFee,
+            total: total,
+            paymentStatus: 'pending',
+            paymentReference: orderReference,
+            orderStatus: 'pending'
+          });
+        } catch (err) {
+          console.error("Failed to save order to firestore", err);
+        }
+
         clearCart();
         setIsProcessing(false);
         navigate(`/order-success?orderId=${orderReference}`);
