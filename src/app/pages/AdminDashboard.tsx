@@ -263,11 +263,25 @@ export function AdminDashboard() {
             <div className="space-y-4">
               {orders.map(order => (
                 <div key={order.id} className="border rounded-lg p-4 bg-gray-50 flex flex-col sm:flex-row justify-between gap-4">
-                  <div>
+                  <div className="flex-1">
                     <div className="font-bold text-gray-800">{order.userName}</div>
                     <div className="text-sm text-gray-600 mb-1">{order.userEmail} | {order.userPhone}</div>
                     <div className="text-sm text-gray-500 mb-2">{order.shippingAddress.street}, {order.shippingAddress.city}, {order.shippingAddress.state}</div>
-                    <div className="text-xs text-gray-500">Ref: {order.paymentReference} | Date: {order.createdAt?.toDate?.()?.toLocaleDateString?.() || 'N/A'}</div>
+                    <div className="text-xs text-gray-500 mb-3">Ref: {order.paymentReference} | Date: {order.createdAt?.toDate?.()?.toLocaleDateString?.() || 'N/A'}</div>
+                    
+                    {order.items && order.items.length > 0 && (
+                      <div className="bg-white p-3 rounded border border-gray-200 mt-2">
+                        <div className="font-semibold text-sm mb-2 text-gray-700">Order Items:</div>
+                        <ul className="text-sm text-gray-600 space-y-1.5">
+                          {order.items.map((item, idx) => (
+                            <li key={idx} className="flex justify-between border-b border-gray-50 pb-1.5 last:border-0 last:pb-0">
+                              <span className="flex-1">{item.quantity}x {item.productName}</span>
+                              <span className="font-semibold text-gray-800 ml-2">₦{(item.price * item.quantity).toLocaleString()}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
                   </div>
                   <div className="flex flex-col items-start sm:items-end gap-2">
                     <div className="font-bold text-red-600">₦{order.total.toLocaleString()}</div>
