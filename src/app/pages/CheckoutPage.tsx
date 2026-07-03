@@ -293,15 +293,15 @@ export function CheckoutPage() {
                 <div className="bg-white p-3 rounded border border-red-200 mb-3 text-sm">
                   <div className="flex justify-between mb-1">
                     <span className="text-gray-500">Bank:</span>
-                    <span className="font-semibold text-gray-800">Zenith Bank</span>
+                    <span className="font-semibold text-gray-800">FCMB</span>
                   </div>
                   <div className="flex justify-between mb-1">
                     <span className="text-gray-500">Account Name:</span>
-                    <span className="font-semibold text-gray-800">Zeetech Distribution Ltd</span>
+                    <span className="font-semibold text-gray-800">Zee tech distribution</span>
                   </div>
                   <div className="flex justify-between mb-1">
                     <span className="text-gray-500">Account Number:</span>
-                    <span className="font-semibold text-gray-800 tracking-wider">1234567890</span>
+                    <span className="font-semibold text-gray-800 tracking-wider">1006268527</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-500">Order Ref:</span>
