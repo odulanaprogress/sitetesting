@@ -18,6 +18,8 @@ export function ProductsPage() {
   const [sortBy, setSortBy] = useState<'featured' | 'price-low' | 'price-high' | 'popular'>('featured');
   const [searchInput, setSearchInput] = useState(searchParam);
   const [showFilters, setShowFilters] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const productsPerPage = 10;
 
   useEffect(() => {
     if (categoryParam) setSelectedCategory(categoryParam);
@@ -71,7 +73,18 @@ export function ProductsPage() {
     }
 
     return filtered;
-  }, [selectedCategory, priceRange, sortBy, searchInput, products]);
+  }, [selectedCategory, priceRange, sortBy, searchInput, products, selectedSubcategory]);
+
+  // Reset page when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [selectedCategory, priceRange, sortBy, searchInput, selectedSubcategory]);
+
+  const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
+  const paginatedProducts = filteredProducts.slice(
+    (currentPage - 1) * productsPerPage,
+    currentPage * productsPerPage
+  );
 
   const handleCategoryChange = (cat: string) => {
     setSelectedCategory(cat);
@@ -271,11 +284,55 @@ export function ProductsPage() {
                 </button>
               </div>
             ) : (
-              <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-5">
-                {filteredProducts.map(product => (
-                  <ProductCard key={product.id} product={product} />
-                ))}
-              </div>
+              <>
+                <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-5">
+                  {paginatedProducts.map(product => (
+                    <ProductCard key={product.id} product={product} />
+                  ))}
+                </div>
+                {totalPages > 1 && (
+                  <div className="mt-8 flex justify-center items-center gap-2">
+                    <button
+                      onClick={() => {
+                        setCurrentPage(p => Math.max(1, p - 1));
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                      }}
+                      disabled={currentPage === 1}
+                      className="px-3 py-1 sm:px-4 sm:py-2 bg-white border border-gray-200 hover:bg-gray-50 rounded-lg disabled:opacity-50 text-sm font-medium transition-colors"
+                    >
+                      Prev
+                    </button>
+                    <div className="flex items-center gap-1 sm:gap-2 overflow-x-auto max-w-[200px] sm:max-w-none no-scrollbar">
+                      {Array.from({ length: totalPages }).map((_, idx) => (
+                        <button
+                          key={idx}
+                          onClick={() => {
+                            setCurrentPage(idx + 1);
+                            window.scrollTo({ top: 0, behavior: 'smooth' });
+                          }}
+                          className={`min-w-[32px] h-8 sm:min-w-[40px] sm:h-10 flex items-center justify-center rounded-lg text-sm transition-colors ${
+                            currentPage === idx + 1
+                              ? 'bg-[#b91c1c] text-white font-bold shadow-sm'
+                              : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50'
+                          }`}
+                        >
+                          {idx + 1}
+                        </button>
+                      ))}
+                    </div>
+                    <button
+                      onClick={() => {
+                        setCurrentPage(p => Math.min(totalPages, p + 1));
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                      }}
+                      disabled={currentPage === totalPages}
+                      className="px-3 py-1 sm:px-4 sm:py-2 bg-white border border-gray-200 hover:bg-gray-50 rounded-lg disabled:opacity-50 text-sm font-medium transition-colors"
+                    >
+                      Next
+                    </button>
+                  </div>
+                )}
+              </>
             )}
           </main>
         </div>
