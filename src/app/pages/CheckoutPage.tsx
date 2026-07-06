@@ -97,7 +97,7 @@ export function CheckoutPage() {
           shipping_address: `${formData.address}, ${formData.city}, ${formData.state}`,
           items_list: `${cartItems}\n\nProof of Payment: ${proofOfPaymentUrl}`,
           total_amount: `₦${total.toLocaleString()}`,
-          to_email: 'wheeljack2019@gmail.com'
+          email: 'wheeljack2019@gmail.com' // Matching the {{email}} variable from your screenshot
         }
       };
 
