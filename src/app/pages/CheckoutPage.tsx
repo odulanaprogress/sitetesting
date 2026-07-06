@@ -57,57 +57,34 @@ export function CheckoutPage() {
     setIsProcessing(true);
 
     try {
-      let proofOfPaymentUrl = 'Not provided';
+      const submitData = new FormData();
+      submitData.append('Order Reference', orderReference);
+      submitData.append('Full Name', formData.fullName);
+      submitData.append('Email', formData.email);
+      submitData.append('Phone', formData.phone);
+      submitData.append('Delivery Address', formData.address);
+      submitData.append('City', formData.city);
+      submitData.append('State', formData.state);
+      submitData.append('Delivery Option', formData.deliveryOption);
+      submitData.append('Total Amount', `₦${total.toLocaleString()}`);
       
-      // Upload proof to Cloudinary
-      if (proofFile) {
-        toast.info('Uploading proof of payment...');
-        const cloudData = new FormData();
-        cloudData.append('file', proofFile);
-        cloudData.append('upload_preset', uploadPreset);
-        
-        try {
-          const res = await fetch(`https://api.cloudinary.com/v1_1/${cloudinaryConfig.cloudName}/upload`, {
-            method: 'POST',
-            body: cloudData,
-          });
-          const uploadResult = await res.json();
-          if (uploadResult.secure_url) {
-            proofOfPaymentUrl = uploadResult.secure_url;
-          }
-        } catch (e) {
-          console.error("Cloudinary upload failed", e);
-          toast.error("Warning: Could not upload proof of payment image, but continuing with order.");
-        }
-      }
-
-      toast.info('Processing order details...');
-
       const cartItems = cart.map(item => `${item.quantity}x ${item.name} (₦${(item.price * item.quantity).toLocaleString()})`).join('\n');
-      
-      const emailPayload = {
-        service_id: 'service_7y4ymlh',
-        template_id: 'template_2xg7eh8',
-        user_id: 'z9pTgHJIVpKUvjJoe',
-        template_params: {
-          order_id: orderReference,
-          customer_name: formData.fullName,
-          customer_email: formData.email,
-          customer_phone: formData.phone,
-          shipping_address: `${formData.address}, ${formData.city}, ${formData.state}`,
-          items_list: `${cartItems}\n\nProof of Payment: ${proofOfPaymentUrl}`,
-          total_amount: `₦${total.toLocaleString()}`,
-          email: 'zeetechdistributions@gmail.com' // Sending directly to the official admin email
-        }
-      };
+      submitData.append('Order Items', cartItems);
 
-      const response = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
+      submitData.append('Proof of Payment', proofFile);
+      submitData.append('_subject', `New Order ${orderReference} from ${formData.fullName}`);
+
+      const response = await fetch('https://formsubmit.co/ajax/zeetechdistributionadminsupport01@mail.com', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(emailPayload)
+        body: submitData,
+        headers: {
+          'Accept': 'application/json'
+        }
       });
 
-      if (response.ok || response.status === 200) {
+      const result = await response.json();
+
+      if (result.success === 'true' || response.ok) {
         // Save to Firestore
         try {
           await createOrder({
