@@ -197,8 +197,7 @@ export function ProductDetailPage() {
               
               <button
                 onClick={handleAddToCart}
-                disabled={product.stock === 0}
-                className="flex-1 bg-[#ef4444] text-white rounded-sm font-semibold hover:bg-red-700 transition-colors flex items-center justify-center disabled:bg-gray-400 disabled:cursor-not-allowed text-sm sm:text-base"
+                className="flex-1 bg-[#ef4444] text-white rounded-sm font-semibold hover:bg-red-700 transition-colors flex items-center justify-center text-sm sm:text-base"
                 style={{ minHeight: '44px' }}
               >
                 Add to cart
