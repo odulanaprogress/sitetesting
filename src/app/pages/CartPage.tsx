@@ -44,18 +44,18 @@ export function CartPage() {
 
               <div className="divide-y">
                 {cart.map(item => (
-                  <div key={item.id} className="p-4 sm:p-6 flex flex-col sm:flex-row gap-4">
-                    <div className="flex gap-4 flex-1">
+                  <div key={item.id} className="p-3 sm:p-6 flex flex-col sm:flex-row gap-3 sm:gap-4 border-b last:border-0 border-gray-100">
+                    <div className="flex gap-3 flex-1">
                       <img
                         src={item.image}
                         alt={item.name}
-                        className="w-20 h-20 sm:w-24 sm:h-24 object-cover rounded-lg shrink-0"
+                        className="w-16 h-16 sm:w-24 sm:h-24 object-cover rounded-md sm:rounded-lg shrink-0"
                       />
 
                       <div className="flex-1 min-w-0">
-                        <h3 className="font-semibold mb-1 text-sm sm:text-base truncate">{item.name}</h3>
+                        <h3 className="font-semibold text-sm sm:text-base leading-tight truncate mb-1">{item.name}</h3>
                         {item.variant && (
-                          <p className="text-xs sm:text-sm text-gray-600 mb-1 sm:mb-2">{item.variant}</p>
+                          <p className="text-xs text-gray-500 mb-1">{item.variant}</p>
                         )}
                         <div className="font-bold text-red-600 text-sm sm:text-base">
                           ₦{item.price.toLocaleString()}
@@ -63,34 +63,34 @@ export function CartPage() {
                       </div>
                     </div>
 
-                    <div className="flex items-center justify-between sm:flex-col sm:items-end sm:justify-between border-t border-gray-100 sm:border-t-0 pt-3 sm:pt-0 mt-2 sm:mt-0">
-                      <button
-                        onClick={() => removeFromCart(item.id)}
-                        className="text-red-500 hover:text-red-600 transition-colors p-2 sm:p-0 order-last sm:order-first"
-                        title="Remove item"
-                      >
-                        <Trash2 size={20} />
-                      </button>
-
-                      <div className="flex items-center gap-1 sm:gap-2 border rounded-lg">
+                    <div className="flex flex-row items-center justify-between sm:flex-col sm:items-end sm:justify-between pt-2 sm:pt-0">
+                      <div className="flex items-center gap-1 sm:gap-2 border border-gray-200 rounded-md sm:rounded-lg">
                         <button
                           onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                          className="p-1.5 sm:p-2 hover:bg-gray-100 transition-colors"
+                          className="p-1 sm:p-2 hover:bg-gray-50 transition-colors"
                         >
-                          <Minus size={14} className="sm:w-4 sm:h-4" />
+                          <Minus size={14} className="sm:w-4 sm:h-4 text-gray-600" />
                         </button>
-                        <span className="w-8 sm:w-12 text-center font-semibold text-sm sm:text-base">{item.quantity}</span>
+                        <span className="w-6 sm:w-12 text-center font-semibold text-sm sm:text-base">{item.quantity}</span>
                         <button
                           onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                          className="p-1.5 sm:p-2 hover:bg-gray-100 transition-colors"
+                          className="p-1 sm:p-2 hover:bg-gray-50 transition-colors"
                         >
-                          <Plus size={14} className="sm:w-4 sm:h-4" />
+                          <Plus size={14} className="sm:w-4 sm:h-4 text-gray-600" />
                         </button>
                       </div>
 
                       <div className="font-bold text-sm sm:text-base hidden sm:block">
                         ₦{(item.price * item.quantity).toLocaleString()}
                       </div>
+                      
+                      <button
+                        onClick={() => removeFromCart(item.id)}
+                        className="text-red-500 hover:text-red-700 transition-colors p-1"
+                        title="Remove item"
+                      >
+                        <Trash2 size={18} className="sm:w-5 sm:h-5" />
+                      </button>
                     </div>
                   </div>
                 ))}

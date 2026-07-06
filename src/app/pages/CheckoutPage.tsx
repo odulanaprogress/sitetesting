@@ -284,12 +284,12 @@ export function CheckoutPage() {
 
               <div className="max-h-64 overflow-y-auto mb-3 sm:mb-4">
                 {cart.map(item => (
-                  <div key={item.id} className="flex gap-2 sm:gap-3 mb-3 pb-3 border-b last:border-0">
-                    <img src={item.image} alt={item.name} className="w-14 h-14 sm:w-16 sm:h-16 object-cover rounded" />
+                  <div key={item.id} className="flex gap-2.5 sm:gap-3 mb-3 pb-3 border-b last:border-0 border-gray-100">
+                    <img src={item.image} alt={item.name} className="w-12 h-12 sm:w-16 sm:h-16 object-cover rounded-md" />
                     <div className="flex-1 min-w-0">
                       <div className="font-semibold text-xs sm:text-sm truncate">{item.name}</div>
-                      <div className="text-xs sm:text-sm text-gray-600">Qty: {item.quantity}</div>
-                      <div className="text-xs sm:text-sm font-semibold text-red-600">
+                      <div className="text-[11px] sm:text-sm text-gray-500 mt-0.5">Qty: {item.quantity}</div>
+                      <div className="text-xs sm:text-sm font-bold text-red-600 mt-0.5">
                         ₦{(item.price * item.quantity).toLocaleString()}
                       </div>
                     </div>
