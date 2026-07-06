@@ -97,7 +97,7 @@ export function CheckoutPage() {
           shipping_address: `${formData.address}, ${formData.city}, ${formData.state}`,
           items_list: `${cartItems}\n\nProof of Payment: ${proofOfPaymentUrl}`,
           total_amount: `₦${total.toLocaleString()}`,
-          email: 'wheeljack2019@gmail.com' // Matching the {{email}} variable from your screenshot
+          email: 'zeetechdistributions@gmail.com' // Sending directly to the official admin email
         }
       };
 
