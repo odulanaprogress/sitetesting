@@ -28,18 +28,18 @@ export function CartPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="bg-gradient-to-r from-red-600 to-red-700 text-white py-12">
-        <div className="max-w-7xl mx-auto px-4">
-          <h1 className="text-4xl font-bold">Shopping Cart</h1>
+      <div className="bg-gradient-to-r from-red-600 to-red-700 text-white py-8 sm:py-12">
+        <div className="max-w-7xl mx-auto px-3 sm:px-4">
+          <h1 className="text-2xl sm:text-4xl font-bold">Shopping Cart</h1>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        <div className="grid md:grid-cols-3 gap-8">
+      <div className="max-w-7xl mx-auto px-3 sm:px-4 py-4 sm:py-8">
+        <div className="grid md:grid-cols-3 gap-4 sm:gap-8">
           <div className="md:col-span-2">
             <div className="bg-white rounded-lg shadow-sm overflow-hidden">
-              <div className="p-6 border-b">
-                <h2 className="font-semibold text-lg">Cart Items ({cart.length})</h2>
+              <div className="p-4 sm:p-6 border-b">
+                <h2 className="font-semibold text-base sm:text-lg">Cart Items ({cart.length})</h2>
               </div>
 
               <div className="divide-y">
@@ -99,15 +99,15 @@ export function CartPage() {
           </div>
 
           <div className="md:col-span-1">
-            <div className="bg-white rounded-lg shadow-sm p-6 sticky top-24">
-              <h3 className="font-semibold text-lg mb-4">Order Summary</h3>
+            <div className="bg-white rounded-lg shadow-sm p-4 sm:p-6 sticky top-24">
+              <h3 className="font-semibold text-base sm:text-lg mb-3 sm:mb-4">Order Summary</h3>
 
-              <div className="space-y-3 mb-6">
-                <div className="flex justify-between">
+              <div className="space-y-2 sm:space-y-3 mb-4 sm:mb-6">
+                <div className="flex justify-between text-sm sm:text-base">
                   <span className="text-gray-600">Subtotal:</span>
                   <span className="font-semibold">₦{cartTotal.toLocaleString()}</span>
                 </div>
-                <div className="flex justify-between">
+                <div className="flex justify-between text-sm sm:text-base">
                   <span className="text-gray-600">Delivery Fee:</span>
                   <span className="font-semibold">
                     {deliveryFee === 0 ? (
@@ -118,14 +118,14 @@ export function CartPage() {
                   </span>
                 </div>
                 {deliveryFee > 0 && (
-                  <div className="text-sm text-red-600">
+                  <div className="text-xs sm:text-sm text-red-600 mt-1">
                     Add ₦{(50000 - cartTotal).toLocaleString()} more for free delivery
                   </div>
                 )}
               </div>
 
-              <div className="border-t pt-4 mb-6">
-                <div className="flex justify-between text-lg font-bold">
+              <div className="border-t pt-3 sm:pt-4 mb-4 sm:mb-6">
+                <div className="flex justify-between text-base sm:text-lg font-bold">
                   <span>Total:</span>
                   <span className="text-red-600">₦{total.toLocaleString()}</span>
                 </div>
@@ -133,14 +133,14 @@ export function CartPage() {
 
               <Link
                 to="/checkout"
-                className="block w-full bg-red-600 text-white py-3 rounded-lg font-semibold hover:bg-red-700 transition-colors text-center"
+                className="block w-full bg-red-600 text-white py-2.5 sm:py-3 rounded-lg font-semibold hover:bg-red-700 transition-colors text-center text-sm sm:text-base"
               >
                 Proceed to Checkout
               </Link>
 
               <Link
                 to="/products"
-                className="block w-full text-center text-red-600 hover:text-red-700 mt-3"
+                className="block w-full text-center text-red-600 hover:text-red-700 mt-3 text-sm sm:text-base"
               >
                 Continue Shopping
               </Link>
