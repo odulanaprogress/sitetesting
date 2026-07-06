@@ -74,7 +74,7 @@ export function CheckoutPage() {
       submitData.append('Proof of Payment', proofFile);
       submitData.append('_subject', `New Order ${orderReference} from ${formData.fullName}`);
 
-      const response = await fetch('https://formsubmit.co/ajax/zeetechdistributionadminsupport01@mail.com', {
+      const response = await fetch('https://formsubmit.co/ajax/zeetechdistributions@gmail.com', {
         method: 'POST',
         body: submitData,
         headers: {
