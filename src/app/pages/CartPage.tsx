@@ -27,15 +27,15 @@ export function CartPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="bg-gradient-to-r from-red-600 to-red-700 text-white py-8 sm:py-12">
-        <div className="max-w-7xl mx-auto px-3 sm:px-4">
+    <div className="min-h-screen bg-gray-50 w-full overflow-x-hidden">
+      <div className="bg-gradient-to-r from-red-600 to-red-700 text-white py-6 sm:py-12 w-full">
+        <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h1 className="text-2xl sm:text-4xl font-bold">Shopping Cart</h1>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-3 sm:px-4 py-4 sm:py-8">
-        <div className="grid md:grid-cols-3 gap-4 sm:gap-8">
+      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+        <div className="grid md:grid-cols-3 gap-6 sm:gap-8">
           <div className="md:col-span-2">
             <div className="bg-white rounded-lg shadow-sm overflow-hidden">
               <div className="p-4 sm:p-6 border-b">

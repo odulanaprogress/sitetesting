@@ -130,15 +130,15 @@ export function CheckoutPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="bg-gradient-to-r from-red-600 to-red-700 text-white py-8 sm:py-12">
-        <div className="max-w-7xl mx-auto px-3 sm:px-4">
+    <div className="min-h-screen bg-gray-50 w-full overflow-x-hidden">
+      <div className="bg-gradient-to-r from-red-600 to-red-700 text-white py-6 sm:py-12 w-full">
+        <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold">Checkout</h1>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-3 sm:px-4 py-4 sm:py-8">
-        <div className="grid md:grid-cols-3 gap-4 sm:gap-8">
+      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+        <div className="grid md:grid-cols-3 gap-6 sm:gap-8">
           <div className="md:col-span-2">
             <div className="bg-white rounded-lg shadow-sm p-4 sm:p-6 mb-4 sm:mb-6">
               <h2 className="font-semibold text-base sm:text-lg mb-3 sm:mb-4 flex items-center gap-2">
@@ -325,36 +325,38 @@ export function CheckoutPage() {
               <div className="bg-red-50 p-4 rounded-lg mb-6 border border-red-100">
                 <h4 className="font-bold text-red-800 mb-2">Payment Instructions</h4>
                 <p className="text-sm text-red-700 mb-2">Please transfer exactly <strong>₦{total.toLocaleString()}</strong> to the account below:</p>
-                <div className="bg-white p-3 rounded border border-red-200 mb-3 text-sm">
-                  <div className="flex justify-between mb-1">
-                    <span className="text-gray-500">Bank:</span>
-                    <span className="font-semibold text-gray-800">FCMB</span>
+                <div className="bg-white p-3 rounded border border-red-200 mb-3 text-sm overflow-hidden">
+                  <div className="flex justify-between mb-1 gap-2">
+                    <span className="text-gray-500 whitespace-nowrap">Bank:</span>
+                    <span className="font-semibold text-gray-800 text-right">FCMB</span>
                   </div>
-                  <div className="flex justify-between mb-1">
-                    <span className="text-gray-500">Account Name:</span>
-                    <span className="font-semibold text-gray-800">Zee tech distribution</span>
+                  <div className="flex justify-between mb-1 gap-2">
+                    <span className="text-gray-500 whitespace-nowrap">Name:</span>
+                    <span className="font-semibold text-gray-800 text-right break-words">Zee tech distribution</span>
                   </div>
-                  <div className="flex justify-between mb-1">
-                    <span className="text-gray-500">Account Number:</span>
-                    <span className="font-semibold text-gray-800 tracking-wider">1006268527</span>
+                  <div className="flex justify-between mb-1 gap-2">
+                    <span className="text-gray-500 whitespace-nowrap">Account:</span>
+                    <span className="font-semibold text-gray-800 tracking-wider text-right break-all">1006268527</span>
                   </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-500">Order Ref:</span>
-                    <span className="font-bold text-red-600">{orderReference}</span>
+                  <div className="flex justify-between gap-2">
+                    <span className="text-gray-500 whitespace-nowrap">Ref:</span>
+                    <span className="font-bold text-red-600 text-right break-all">{orderReference}</span>
                   </div>
                 </div>
-                <div className="text-xs text-red-600 font-medium">Use the Order Ref ({orderReference}) as your transfer description.</div>
+                <div className="text-xs text-red-600 font-medium break-words">Use the Order Ref ({orderReference}) as your transfer description.</div>
               </div>
 
-              <div className="mb-6">
+              <div className="mb-6 overflow-hidden max-w-full">
                 <label className="block text-sm font-semibold mb-2">Upload Proof of Payment *</label>
-                <input
-                  type="file"
-                  accept="image/png, image/jpeg, image/jpg, application/pdf, video/mp4"
-                  onChange={e => setProofFile(e.target.files?.[0] || null)}
-                  className="w-full text-sm text-gray-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-red-50 file:text-red-700 hover:file:bg-red-100 border rounded-lg cursor-pointer"
-                  required
-                />
+                <div className="w-full max-w-full overflow-hidden">
+                  <input
+                    type="file"
+                    accept="image/png, image/jpeg, image/jpg, application/pdf, video/mp4"
+                    onChange={e => setProofFile(e.target.files?.[0] || null)}
+                    className="w-full text-sm text-gray-500 file:mr-2 sm:file:mr-4 file:py-2 file:px-3 sm:file:py-2.5 sm:file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-red-50 file:text-red-700 hover:file:bg-red-100 border rounded-lg cursor-pointer overflow-hidden text-ellipsis"
+                    required
+                  />
+                </div>
                 <p className="text-xs text-gray-400 mt-1.5">Accepted: PNG, JPG, PDF, MP4 (Max 5MB)</p>
               </div>
 
