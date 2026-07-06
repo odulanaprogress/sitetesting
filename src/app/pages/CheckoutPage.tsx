@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import { createOrder } from '../../lib/firestore';
+import { cloudinaryConfig, uploadPreset } from '../../lib/cloudinary';
 import { useNavigate } from 'react-router-dom';
 import { CreditCard, Package, CheckCircle } from 'lucide-react';
 import { toast } from 'sonner';
@@ -56,34 +57,57 @@ export function CheckoutPage() {
     setIsProcessing(true);
 
     try {
-      const submitData = new FormData();
-      submitData.append('Order Reference', orderReference);
-      submitData.append('Full Name', formData.fullName);
-      submitData.append('Email', formData.email);
-      submitData.append('Phone', formData.phone);
-      submitData.append('Delivery Address', formData.address);
-      submitData.append('City', formData.city);
-      submitData.append('State', formData.state);
-      submitData.append('Delivery Option', formData.deliveryOption);
-      submitData.append('Total Amount', `₦${total.toLocaleString()}`);
+      let proofOfPaymentUrl = 'Not provided';
       
-      const cartItems = cart.map(item => `${item.quantity}x ${item.name} (₦${(item.price * item.quantity).toLocaleString()})`).join('\n');
-      submitData.append('Order Items', cartItems);
-
-      submitData.append('Proof of Payment', proofFile);
-      submitData.append('_subject', `New Order ${orderReference} from ${formData.fullName}`);
-
-      const response = await fetch('https://formsubmit.co/ajax/zeetechdistributionadminsupport01@mail.com', {
-        method: 'POST',
-        body: submitData,
-        headers: {
-          'Accept': 'application/json'
+      // Upload proof to Cloudinary
+      if (proofFile) {
+        toast.info('Uploading proof of payment...');
+        const cloudData = new FormData();
+        cloudData.append('file', proofFile);
+        cloudData.append('upload_preset', uploadPreset);
+        
+        try {
+          const res = await fetch(`https://api.cloudinary.com/v1_1/${cloudinaryConfig.cloudName}/upload`, {
+            method: 'POST',
+            body: cloudData,
+          });
+          const uploadResult = await res.json();
+          if (uploadResult.secure_url) {
+            proofOfPaymentUrl = uploadResult.secure_url;
+          }
+        } catch (e) {
+          console.error("Cloudinary upload failed", e);
+          toast.error("Warning: Could not upload proof of payment image, but continuing with order.");
         }
+      }
+
+      toast.info('Processing order details...');
+
+      const cartItems = cart.map(item => `${item.quantity}x ${item.name} (₦${(item.price * item.quantity).toLocaleString()})`).join('\n');
+      
+      const emailPayload = {
+        service_id: 'service_7y4ymlh',
+        template_id: 'template_2xg7eh8',
+        user_id: 'z9pTgHJIVpKUvjJoe',
+        template_params: {
+          order_id: orderReference,
+          customer_name: formData.fullName,
+          customer_email: formData.email,
+          customer_phone: formData.phone,
+          shipping_address: `${formData.address}, ${formData.city}, ${formData.state}`,
+          items_list: `${cartItems}\n\nProof of Payment: ${proofOfPaymentUrl}`,
+          total_amount: `₦${total.toLocaleString()}`,
+          to_email: 'wheeljack2019@gmail.com'
+        }
+      };
+
+      const response = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(emailPayload)
       });
 
-      const result = await response.json();
-
-      if (result.success === 'true' || response.ok) {
+      if (response.ok || response.status === 200) {
         // Save to Firestore
         try {
           await createOrder({
@@ -120,7 +144,7 @@ export function CheckoutPage() {
         navigate(`/order-success?orderId=${orderReference}`);
         toast.success('Order placed successfully!');
       } else {
-        throw new Error('Submission failed');
+        throw new Error('Email sending failed');
       }
     } catch (error) {
       setIsProcessing(false);
