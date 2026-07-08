@@ -16,15 +16,16 @@ import {
 import { db } from './firebase';
 import { Product } from '../app/data/products';
 
-// Products Collection
-export const productsCollection = collection(db, 'products');
-export const ordersCollection = collection(db, 'orders');
-export const categoriesCollection = collection(db, 'categories');
+// Products Collection — guarded so they're never called with a null db at module load time
+export const productsCollection = db ? collection(db, 'products') : null;
+export const ordersCollection = db ? collection(db, 'orders') : null;
+export const categoriesCollection = db ? collection(db, 'categories') : null;
 
 // Product Operations
 export async function getAllProducts(): Promise<Product[]> {
+  if (!db) return [];
   try {
-    const querySnapshot = await getDocs(productsCollection);
+    const querySnapshot = await getDocs(collection(db, 'products'));
     return querySnapshot.docs.map(doc => ({
       id: doc.id,
       ...doc.data()
@@ -51,8 +52,9 @@ export async function getProductById(id: string): Promise<Product | null> {
 }
 
 export async function addProduct(product: Omit<Product, 'id'>): Promise<string | null> {
+  if (!db) return null;
   try {
-    const docRef = await addDoc(productsCollection, {
+    const docRef = await addDoc(collection(db, 'products'), {
       ...product,
       createdAt: Timestamp.now(),
       updatedAt: Timestamp.now()
@@ -94,8 +96,9 @@ export async function deleteProduct(id: string): Promise<boolean> {
 
 // Get products by category
 export async function getProductsByCategory(category: string): Promise<Product[]> {
+  if (!db) return [];
   try {
-    const q = query(productsCollection, where('category', '==', category));
+    const q = query(collection(db, 'products'), where('category', '==', category));
     const querySnapshot = await getDocs(q);
     return querySnapshot.docs.map(doc => ({
       id: doc.id,
@@ -158,8 +161,9 @@ export interface Order {
 }
 
 export async function createOrder(order: Omit<Order, 'id'>): Promise<string | null> {
+  if (!db) return null;
   try {
-    const docRef = await addDoc(ordersCollection, {
+    const docRef = await addDoc(collection(db, 'orders'), {
       ...order,
       createdAt: Timestamp.now(),
       updatedAt: Timestamp.now()
@@ -187,8 +191,9 @@ export async function getOrderById(id: string): Promise<Order | null> {
 }
 
 export async function getUserOrders(userId: string): Promise<Order[]> {
+  if (!db) return [];
   try {
-    const q = query(ordersCollection, where('userId', '==', userId), orderBy('createdAt', 'desc'));
+    const q = query(collection(db, 'orders'), where('userId', '==', userId), orderBy('createdAt', 'desc'));
     const querySnapshot = await getDocs(q);
     return querySnapshot.docs.map(doc => ({
       id: doc.id,
@@ -201,8 +206,9 @@ export async function getUserOrders(userId: string): Promise<Order[]> {
 }
 
 export async function getAllOrders(): Promise<Order[]> {
+  if (!db) return [];
   try {
-    const q = query(ordersCollection, orderBy('createdAt', 'desc'));
+    const q = query(collection(db, 'orders'), orderBy('createdAt', 'desc'));
     const querySnapshot = await getDocs(q);
     return querySnapshot.docs.map(doc => ({
       id: doc.id,
@@ -233,10 +239,11 @@ export async function updateOrderStatus(
 
 // Initialize default products (run once)
 export async function initializeProducts(products: Omit<Product, 'id'>[]): Promise<void> {
+  if (!db) { console.error('Firestore not available'); return; }
   try {
     const batch = writeBatch(db);
     products.forEach(product => {
-      const docRef = doc(productsCollection);
+      const docRef = doc(collection(db!, 'products'));
       batch.set(docRef, {
         ...product,
         createdAt: Timestamp.now(),

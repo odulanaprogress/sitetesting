@@ -1,16 +1,6 @@
-// Safe Firebase initialization with fallback
-let firebaseInitialized = false;
-let initError: Error | null = null;
+// Safe Firebase initialization status helper
+// We don't use top-level await here — just re-export the already-initialized instances
+import { db, auth } from './firebase';
 
-try {
-  // Attempt to import and initialize Firebase
-  await import('./firebase');
-  firebaseInitialized = true;
-} catch (error) {
-  console.error('Firebase initialization failed:', error);
-  initError = error as Error;
-  firebaseInitialized = false;
-}
-
-export const isFirebaseReady = () => firebaseInitialized;
-export const getFirebaseError = () => initError;
+export const isFirebaseReady = () => db !== null && auth !== null;
+export const getFirebaseError = () => null; // errors are logged in firebase.ts

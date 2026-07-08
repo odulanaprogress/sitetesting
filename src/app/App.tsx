@@ -36,15 +36,23 @@ function PageFallback() {
 
 class ErrorBoundary extends React.Component<
   { children: React.ReactNode },
-  { hasError: boolean; message: string }
+  { hasError: boolean; message: string; retryCount: number }
 > {
   constructor(props: { children: React.ReactNode }) {
     super(props);
-    this.state = { hasError: false, message: '' };
+    this.state = { hasError: false, message: '', retryCount: 0 };
   }
   static getDerivedStateFromError(err: Error) {
     return { hasError: true, message: err?.message ?? 'Unknown error' };
   }
+  handleRetry = () => {
+    // Try a soft reset first (up to 2 times), then force reload
+    if (this.state.retryCount < 2) {
+      this.setState(prev => ({ hasError: false, message: '', retryCount: prev.retryCount + 1 }));
+    } else {
+      window.location.reload();
+    }
+  };
   render() {
     if (this.state.hasError) {
       return (
@@ -52,13 +60,22 @@ class ErrorBoundary extends React.Component<
           <div className="bg-white rounded-2xl shadow-lg p-8 max-w-md w-full text-center">
             <div className="text-4xl mb-4">⚠️</div>
             <h2 className="text-xl font-bold text-gray-800 mb-2">Something went wrong</h2>
-            <p className="text-sm text-gray-500 mb-6">{this.state.message}</p>
-            <button
-              onClick={() => { this.setState({ hasError: false, message: '' }); window.location.reload(); }}
-              className="bg-red-600 text-white px-6 py-2.5 rounded-xl font-semibold hover:bg-red-700 transition-colors"
-            >
-              Reload page
-            </button>
+            <p className="text-sm text-gray-500 mb-2">{this.state.message}</p>
+            <p className="text-xs text-gray-400 mb-6">This is usually a temporary network or connection issue.</p>
+            <div className="flex gap-3 justify-center">
+              <button
+                onClick={this.handleRetry}
+                className="bg-red-600 text-white px-6 py-2.5 rounded-xl font-semibold hover:bg-red-700 transition-colors text-sm"
+              >
+                {this.state.retryCount < 2 ? 'Try Again' : 'Reload Page'}
+              </button>
+              <button
+                onClick={() => { window.location.href = '/'; }}
+                className="border border-gray-200 text-gray-600 px-6 py-2.5 rounded-xl font-semibold hover:bg-gray-50 transition-colors text-sm"
+              >
+                Go Home
+              </button>
+            </div>
           </div>
         </div>
       );
