@@ -66,11 +66,18 @@ export function HomePage() {
   const latestProducts = [...products].slice(-6).reverse();
 
   useEffect(() => {
+    if (currentBanner >= banners.length && banners.length > 0) {
+      setCurrentBanner(0);
+    }
+  }, [banners.length, currentBanner]);
+
+  useEffect(() => {
+    if (banners.length === 0) return;
     const timer = setInterval(() => {
       setCurrentBanner(prev => (prev + 1) % banners.length);
     }, 5000);
     return () => clearInterval(timer);
-  }, []);
+  }, [banners.length]);
 
   return (
     <div className="min-h-screen bg-white">
@@ -81,16 +88,16 @@ export function HomePage() {
         <div className="relative max-w-7xl mx-auto px-4 h-full flex items-center">
           <div className="text-white max-w-2xl">
             <h1 className="text-2xl sm:text-3xl md:text-5xl font-bold mb-3 sm:mb-4 leading-tight drop-shadow-lg">
-              {banners[currentBanner].title}
+              {banners[currentBanner]?.title ?? ''}
             </h1>
             <p className="text-sm sm:text-base md:text-lg mb-4 sm:mb-6 text-white/90 leading-relaxed drop-shadow-md max-w-xl hidden sm:block">
-              {banners[currentBanner].subtitle}
+              {banners[currentBanner]?.subtitle ?? ''}
             </p>
             <Link
               to="/products"
               className="inline-flex items-center gap-2 bg-white hover:bg-gray-50 text-[#b91c1c] px-5 sm:px-7 py-2.5 sm:py-3.5 rounded-lg font-bold transition-all shadow-xl text-sm sm:text-base"
             >
-              {banners[currentBanner].cta} <ChevronRight size={16} />
+              {banners[currentBanner]?.cta ?? 'Shop Now'} <ChevronRight size={16} />
             </Link>
           </div>
         </div>
