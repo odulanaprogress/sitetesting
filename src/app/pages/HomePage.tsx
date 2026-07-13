@@ -82,8 +82,15 @@ export function HomePage() {
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Banner */}
-      <section className="relative h-[260px] sm:h-[340px] md:h-[440px] bg-gradient-to-br from-[#b91c1c] via-[#991b1b] to-[#7f1d1d] overflow-hidden">
-        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmZmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PHBhdGggZD0iTTM2IDE2YzAgMTAgMjAgMTAgMjAgMjBzLTEwIDIwLTIwIDIwLTIwLTEwLTIwLTIwIDEwLTIwIDIwLTIweiIvPjwvZz48L2c+PC9zdmc+')] opacity-20" />
+      <section 
+        className="relative h-[260px] sm:h-[340px] md:h-[440px] bg-gradient-to-br from-[#b91c1c] via-[#991b1b] to-[#7f1d1d] overflow-hidden"
+        style={banners[currentBanner]?.image ? {
+          backgroundImage: `url(${banners[currentBanner]?.image})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center'
+        } : undefined}
+      >
+        <div className={`absolute inset-0 ${banners[currentBanner]?.image ? 'bg-black/50' : 'bg-[url(\'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmZmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PHBhdGggZD0iTTM2IDE2YzAgMTAgMjAgMTAgMjAgMjBzLTEwIDIwLTIwIDIwLTIwLTEwLTIwLTIwIDEwLTIwIDIwLTIweiIvPjwvZz48L2c+PC9zdmc+\')] opacity-20'}`} />
 
         <div className="relative max-w-7xl mx-auto px-4 h-full flex items-center">
           <div className="text-white max-w-2xl">
@@ -255,9 +262,9 @@ export function HomePage() {
         <div className="relative max-w-7xl mx-auto px-4">
           <div className="text-center mb-8">
             <div className="inline-flex items-center gap-2 bg-red-100 text-[#b91c1c] text-xs font-bold px-3 py-1.5 rounded-full mb-3">
-              <Package size={12} /> Who Are We
+              <Package size={12} /> About us
             </div>
-            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">Who Are We</h2>
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">About us</h2>
             <p className="text-gray-600 text-sm sm:text-base max-w-3xl mx-auto leading-relaxed">
               ZEE-TECH DISTRIBUTIONS ENTERPRISES is a registered business specializing in distribution of quality and reliable phone accessories, computer accessories, content creation kits and IT solutions. We are committed to providing reliable technology products and security solutions for homes, offices, and businesses, with a focus on quality service and customer satisfaction.
             </p>
