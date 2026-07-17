@@ -83,7 +83,7 @@ export function Header() {
   const navLinks = [
     { to: '/', label: 'Home' },
     { to: '/products', label: 'Shop' },
-    { to: '/about', label: 'Who Are We' },
+    { to: '/about', label: 'About Us' },
   ];
 
   return (
@@ -358,7 +358,7 @@ export function Header() {
                 to="/about"
                 className="flex items-center gap-1 px-4 py-3 text-white text-sm font-medium hover:bg-[#7a1717] transition-colors whitespace-nowrap"
               >
-                Who Are We
+                About Us
               </Link>
               <Link
                 to="/wholesale"
@@ -416,7 +416,7 @@ export function Header() {
                 { to: '/products', label: 'Shop' },
                 { to: '/wishlist', label: 'Wishlist' },
                 { to: '/wholesale', label: 'Wholesale' },
-                { to: '/about', label: 'Who Are We' },
+                { to: '/about', label: 'About Us' },
               ].map(({ to, label }) => (
                 <Link
                   key={label}
