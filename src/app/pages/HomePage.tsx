@@ -63,7 +63,20 @@ export function HomePage() {
   const displayCategories = categoryImages.length > 0 ? categoryImages.map(c => ({ ...c, to: `/products?category=${c.category}`, img: c.image, desc: c.description })) : defaultCategories.map(c => ({ ...c, desc: c.description }));
   const featuredProducts = products.filter(p => p.featured);
   const trendingDeals = products.filter(p => p.hot);
-  const latestProducts = [...products].slice(-6).reverse();
+  const latestProducts = [...products].reverse().sort((a, b) => {
+    // 1. isNewArrival goes first
+    if (a.isNewArrival && !b.isNewArrival) return -1;
+    if (!a.isNewArrival && b.isNewArrival) return 1;
+
+    // 2. Content Creation kits go next
+    const aIsKit = a.subcategory === 'content-creation' || a.category === 'gadgets';
+    const bIsKit = b.subcategory === 'content-creation' || b.category === 'gadgets';
+    if (aIsKit && !bIsKit) return -1;
+    if (!aIsKit && bIsKit) return 1;
+
+    // Default: maintain relative order (already reversed so newest are first)
+    return 0;
+  }).slice(0, 4);
 
   useEffect(() => {
     if (currentBanner >= banners.length && banners.length > 0) {
@@ -92,7 +105,7 @@ export function HomePage() {
       >
         <div className={`absolute inset-0 ${banners[currentBanner]?.image ? 'bg-black/50' : 'bg-[url(\'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmZmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PHBhdGggZD0iTTM2IDE2YzAgMTAgMjAgMTAgMjAgMjBzLTEwIDIwLTIwIDIwLTIwLTEwLTIwLTIwIDEwLTIwIDIwLTIweiIvPjwvZz48L2c+PC9zdmc+\')] opacity-20'}`} />
 
-        <div className="relative max-w-7xl mx-auto px-4 h-full flex items-center">
+        <div className="relative max-w-7xl mx-auto px-4 h-full flex items-end pb-16 sm:pb-20">
           <div className="text-white max-w-2xl">
             <h1 className="text-2xl sm:text-3xl md:text-5xl font-bold mb-3 sm:mb-4 leading-tight drop-shadow-lg">
               {banners[currentBanner]?.title ?? ''}

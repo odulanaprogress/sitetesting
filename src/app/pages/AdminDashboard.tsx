@@ -655,7 +655,7 @@ function ProductForm({ product, onSave, onCancel }: ProductFormProps) {
     product ?? {
       name: '', shortDescription: '', description: '', price: 0, wholesalePrice: undefined,
       category: '', image: '', images: [], stock: 0,
-      rating: 4.5, reviews: 0, featured: false, hot: false,
+      rating: 4.5, reviews: 0, featured: false, hot: false, isNewArrival: false,
     }
   );
 
@@ -707,6 +707,7 @@ function ProductForm({ product, onSave, onCancel }: ProductFormProps) {
       reviews: Number(formData.reviews) || 0,
       featured: formData.featured ?? false,
       hot: formData.hot ?? false,
+      isNewArrival: formData.isNewArrival ?? false,
       wholesaleAvailable: formData.wholesaleAvailable ?? false,
       variants: formData.variants || [],
     };
@@ -779,6 +780,10 @@ function ProductForm({ product, onSave, onCancel }: ProductFormProps) {
             <label className="flex items-center gap-2 cursor-pointer text-sm font-medium">
               <input type="checkbox" checked={!!formData.hot} onChange={e => sf({ hot: e.target.checked })} className="w-4 h-4 accent-red-600" />
               Trending Deal
+            </label>
+            <label className="flex items-center gap-2 cursor-pointer text-sm font-medium">
+              <input type="checkbox" checked={!!formData.isNewArrival} onChange={e => sf({ isNewArrival: e.target.checked })} className="w-4 h-4 accent-blue-600" />
+              New Arrival
             </label>
             <label className="flex items-center gap-2 cursor-pointer text-sm font-medium">
               <input type="checkbox" checked={!!formData.wholesaleAvailable} onChange={e => sf({ wholesaleAvailable: e.target.checked })} className="w-4 h-4 accent-amber-500" />

@@ -27,6 +27,7 @@ export interface Product {
   featured?: boolean;
   hot?: boolean;
   wholesaleAvailable?: boolean;
+  isNewArrival?: boolean;
 }
 
 export const categories = [
